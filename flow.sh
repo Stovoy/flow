@@ -32,7 +32,7 @@ call() {
     local command="./commands/$1.sh"
     if [[ ! -e $command ]]; then
         command=".flow-$1"
-        if ! which $command; then
+        if ! which $command >/dev/null; then
             echo "Could not find command $1."
             exit 1
         fi
