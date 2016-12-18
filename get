@@ -9,28 +9,36 @@ echo "Downloading flow.go"
 wget -q https://raw.githubusercontent.com/swaggy/flow/master/flow.go
 
 files="$dir/flow.go"
-trap "rm -f $files" SIGTERM EXIT
+trap "rm -f $files" EXIT
 
 echo "Building flow"
 go build flow.go
-files+=" $dir/flow.go"
-trap "rm -f $files" SIGTERM EXIT
+files="$files $dir/flow.go"
+trap "rm -f $files" EXIT
 
 commands="lib async group"
 for command in $commands; do
     echo "Downloading $command command."
     wget -q https://raw.githubusercontent.com/swaggy/flow/master/commands/$command.sh
-    files+=" $dir/$command.sh"
-    trap "rm -f $files" SIGTERM EXIT
+    files="$files $dir/$command.sh"
+    trap "rm -f $files" EXIT
 done
 
 echo "Installing flow into /usr/local/bin/flow"
-mv flow /usr/local/bin/flow
+
+if [ -w /usr/local/bin ]; then
+    mv flow /usr/local/bin/flow
+else
+    sudo mv flow /usr/local/bin/flow
+fi
 
 for command in $commands; do
     dest="/usr/local/bin/.flow-$command"
     echo "Installing command $command into $dest"
     chmod +x $command.sh
-    mv $command.sh $dest
+    if [ -w /usr/local/bin ]; then
+        mv $command.sh $dest
+    else
+        sudo mv $command.sh $dest
+    fi
 done
-
