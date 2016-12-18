@@ -114,7 +114,7 @@ group() {
     # Cleanup on exit.
     trap_cmd="for pid in $command_pids;"
     trap_cmd+='do cleanup $pid; done'
-    trap "$trap_cmd" SIGTERM EXIT
+    trap "$trap_cmd" EXIT
 
     local success_pids=""
     local failed_pids=""

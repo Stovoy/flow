@@ -5,15 +5,10 @@ dir=${TMPDIR:-/tmp}
 echo "Using $dir as the working directory"
 cd $dir
 
-echo "Downloading flow.go"
-wget -q https://raw.githubusercontent.com/swaggy/flow/master/flow.go
+echo "Downloading flow.sh"
+wget -q https://raw.githubusercontent.com/swaggy/flow/master/flow.sh
 
-files="$dir/flow.go"
-trap "rm -f $files" EXIT
-
-echo "Building flow"
-go build flow.go
-files="$files $dir/flow.go"
+files="$dir/flow.sh"
 trap "rm -f $files" EXIT
 
 commands="lib async group"
@@ -25,9 +20,9 @@ for command in $commands; do
 done
 
 echo "Installing flow into /usr/local/bin/flow"
-
 if [ -w /usr/local/bin ]; then
-    mv flow /usr/local/bin/flow
+    chmod +x flow.sh
+    mv flow.sh /usr/local/bin/flow
 else
     sudo mv flow /usr/local/bin/flow
 fi

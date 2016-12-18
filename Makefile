@@ -1,18 +1,9 @@
-.PHONY: install build
+.PHONY: install
 
 default: install
 
-clean:
-	rm -f flow
-
-format:
-	gofmt -w flow.go
-
-build: clean format
-	go build flow.go
-
-install: build
-	@/bin/cp -f flow /usr/local/bin
+install:
+	@/bin/cp -f flow.sh /usr/local/bin/flow
 	@cd commands; \
 	for file in *; do \
 		/bin/cp -f $$file /usr/local/bin/.flow-$${file%???}; \
