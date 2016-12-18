@@ -24,7 +24,7 @@ if [ -w /usr/local/bin ]; then
     chmod +x flow.sh
     mv flow.sh /usr/local/bin/flow
 else
-    sudo mv flow /usr/local/bin/flow
+    sudo mv flow.sh /usr/local/bin/flow
 fi
 
 for command in $commands; do
