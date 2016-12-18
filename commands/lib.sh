@@ -72,6 +72,14 @@ fail_progress_line() {
     fail_color_line "✘ $title"
 }
 
+hide_cursor() {
+    echo -en '\033[?25l'
+}
+
+show_cursor() {
+    echo -en '\033[?25h'
+}
+
 async() {
     (
         pid=$(bash -c 'echo $PPID')
@@ -118,9 +126,11 @@ group() {
 
     # Cleanup on exit.
     trap_cmd="for pid in $command_pids;"
-    trap_cmd+='do cleanup $pid; done'
+    trap_cmd+='do cleanup $pid; done;'
+    trap_cmd+='show_cursor'
     trap "$trap_cmd" EXIT
 
+    hide_cursor
     local success_pids=""
     local failed_pids=""
     local progress_phase=0  # For the progress indicator.
