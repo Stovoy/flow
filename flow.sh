@@ -29,7 +29,7 @@ flow() {
 }
 
 call() {
-	local command="./commands/$1.sh"
+    local command="./commands/$1.sh"
     if [[ ! -e $command ]]; then
         command=".flow-$1"
         if ! which $command; then
@@ -38,12 +38,12 @@ call() {
         fi
     fi
 
-	shift
+    shift
     local args=()
     for arg in "$@"; do
         args+=("$arg")
     done
-	$command "${args[@]}"
+    $command "${args[@]}"
 }
 
 usage() {
