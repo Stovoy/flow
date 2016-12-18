@@ -1,0 +1,4 @@
+#!/bin/bash -e
+# For development - rebuilds flow for every command.
+make install
+./flow "$@"

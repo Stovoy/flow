@@ -1,0 +1,4 @@
+#!/bin/bash -e
+# Installs flow into /usr/local/bin
+
+# Add download code.
