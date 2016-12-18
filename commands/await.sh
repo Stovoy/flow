@@ -6,9 +6,4 @@ else
     source .flow-lib
 fi
 
-args=()
-for arg in "$@"; do
-    args+=("$arg")
-done
-async "${args[@]}"
-echo $!
+await $1

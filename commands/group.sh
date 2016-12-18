@@ -1,9 +1,9 @@
 #!/bin/bash -e
 
-if which .flow-lib; then
-    source .flow-lib
-else
+if [[ -e ./commands/lib.sh ]]; then
     source ./commands/lib.sh
+else
+    source .flow-lib
 fi
 
 group "$@"

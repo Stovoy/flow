@@ -41,7 +41,6 @@ call() {
 	shift
     local args=()
     for arg in "$@"; do
-        echo $arg
         args+=("$arg")
     done
 	$command "${args[@]}"
