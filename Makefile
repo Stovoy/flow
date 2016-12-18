@@ -12,7 +12,6 @@ build: clean format
 	go build flow.go
 
 install: build
-	@echo Installing into /usr/local/bin
 	@/bin/cp -f flow /usr/local/bin
 	@cd commands; \
 	for file in *; do \

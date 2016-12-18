@@ -1,4 +1,36 @@
-#!/bin/bash -e
-# Installs flow into /usr/local/bin
+#!/bin/sh
 
-# Add download code.
+dir=${TMPDIR:-/tmp}
+
+echo "Using $dir as the working directory"
+cd $dir
+
+echo "Downloading flow.go"
+wget -q https://raw.githubusercontent.com/swaggy/flow/master/flow.go
+
+files="$dir/flow.go"
+trap "rm -f $files" SIGTERM EXIT
+
+echo "Building flow"
+go build flow.go
+files+=" $dir/flow.go"
+trap "rm -f $files" SIGTERM EXIT
+
+commands="lib async group"
+for command in $commands; do
+    echo "Downloading $command command."
+    wget -q https://raw.githubusercontent.com/swaggy/flow/master/commands/$command.sh
+    files+=" $dir/$command.sh"
+    trap "rm -f $files" SIGTERM EXIT
+done
+
+echo "Installing flow into /usr/local/bin/flow"
+mv flow /usr/local/bin/flow
+
+for command in $commands; do
+    dest="/usr/local/bin/.flow-$command"
+    echo "Installing command $command into $dest"
+    chmod +x $command.sh
+    mv $command.sh $dest
+done
+
