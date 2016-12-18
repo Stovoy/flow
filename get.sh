@@ -20,8 +20,8 @@ for command in $commands; do
 done
 
 echo "Installing flow into /usr/local/bin/flow"
+chmod +x flow.sh
 if [ -w /usr/local/bin ]; then
-    chmod +x flow.sh
     mv flow.sh /usr/local/bin/flow
 else
     sudo mv flow.sh /usr/local/bin/flow
