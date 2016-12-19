@@ -80,6 +80,10 @@ show_cursor() {
     echo -en '\033[?25h'
 }
 
+clear_line() {
+    echo -en '\033[K'
+}
+
 async() {
     (
         pid=$(bash -c 'echo $PPID')
@@ -138,6 +142,7 @@ group() {
         local lines_printed=1  # Keep track of how many lines we output to backtrack, plus one for the newline.
         local all_done=true
         for pid in $command_pids; do
+            clear_line
             lines_printed=$((lines_printed + 1))
 
             # Load the title from the file.
