@@ -6,5 +6,16 @@ else
     source .flow-lib
 fi
 
-group "$@"
+flag=$1
+if [[ $flag == "--simple" ]]; then
+    export simple=true
+    shift
+fi
+
+args=()
+for arg in "$@"; do
+    args+=("$arg")
+done
+
+group "${args[@]}"
 exit $?

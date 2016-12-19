@@ -6,4 +6,5 @@ else
     source .flow-lib
 fi
 
-await $1
+await "$@"
+exit $?

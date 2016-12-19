@@ -19,10 +19,6 @@ failed_file() {
     echo "${test_out_dir}flow.commands.$pid.failed"
 }
 
-move_up() {
-    local lines=$1
-    echo -e "\033[${lines}A"
-}
 success_title_line() {
     local pid=$1
     success_color_line "= $(cat $(title_file $pid)) ="
@@ -44,6 +40,7 @@ fail_color_line() {
 }
 
 ongoing_progress_line() {
+    if [[ $simple == true ]]; then return; fi
     local title=$1
     local phase=$2
 
@@ -63,24 +60,35 @@ ongoing_progress_line() {
 }
 
 success_progress_line() {
+    if [[ $simple == true ]]; then return; fi
     local title=$1
     success_color_line "✔ $title"
 }
 
 fail_progress_line() {
+    if [[ $simple == true ]]; then return; fi
     local title=$1
     fail_color_line "✘ $title"
 }
 
+move_up() {
+    if [[ $simple == true ]]; then return; fi
+    local lines=$1
+    echo -e "\033[${lines}A"
+}
+
 hide_cursor() {
+    if [[ $simple == true ]]; then return; fi
     echo -en '\033[?25l'
 }
 
 show_cursor() {
+    if [[ $simple == true ]]; then return; fi
     echo -en '\033[?25h'
 }
 
 clear_line() {
+    if [[ $simple == true ]]; then return; fi
     echo -en '\033[K'
 }
 
@@ -134,7 +142,12 @@ group() {
     trap_cmd+='show_cursor'
     trap "$trap_cmd" EXIT
 
-    hide_cursor
+    if [[ $simple == true ]]; then
+        echo "Running commands:"
+        for pid in $command_pids; do
+            echo "  $(cat $(title_file $pid))"
+        done
+    fi
     local success_pids=""
     local failed_pids=""
     local progress_phase=0  # For the progress indicator.
@@ -146,10 +159,7 @@ group() {
             lines_printed=$((lines_printed + 1))
 
             # Load the title from the file.
-            local title_file_for_pid=$(title_file $pid)
-            if [[ -e $title_file_for_pid ]]; then
-                title=$(cat $title_file_for_pid)
-            fi
+            local title=$(cat $(title_file $pid))
 
             if kill -s 0 $pid 2>/dev/null; then
                 # Still running.
