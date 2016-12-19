@@ -2,19 +2,19 @@
 # Library of bash functions for flow internal usage.
 
 out_file() {
-    local pid=$1
+    local pid=${1:-$pid}
     local test_out_dir=${TMPDIR:-/tmp/}
     echo "${test_out_dir}flow.commands.$pid"
 }
 
 title_file() {
-    local pid=$1
+    local pid=${1:-$pid}
     local test_out_dir=${TMPDIR:-/tmp/}
     echo "${test_out_dir}flow.commands.$pid.title"
 }
 
 failed_file() {
-    local pid=$1
+    local pid=${1:-$pid}
     local test_out_dir=${TMPDIR:-/tmp/}
     echo "${test_out_dir}flow.commands.$pid.failed"
 }
