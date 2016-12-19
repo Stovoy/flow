@@ -89,7 +89,7 @@ async() {
         pid=$(bash -c 'echo $PPID')
         out=$(out_file $pid)
         rm -f $out
-        if ! (eval $@ > $out 2>&1); then
+        if ! (export pid; eval $@ > $out 2>&1); then
             touch $(failed_file $pid)
         fi
     )&
