@@ -106,6 +106,11 @@ async() {
 await() {
     local pid=$1
     cat $(out_file $pid)
+    if [[ -e $(failed_file $pid) ]]; then
+        exit 1
+    else
+        exit 0
+    fi
 }
 
 group() {
