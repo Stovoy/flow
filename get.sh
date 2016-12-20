@@ -11,7 +11,7 @@ wget -q https://raw.githubusercontent.com/swaggy/flow/master/flow.sh
 files="$dir/flow.sh"
 trap "rm -f $files" EXIT
 
-commands="lib async group"
+commands="lib async await group"
 for command in $commands; do
     echo "Downloading $command command."
     wget -q https://raw.githubusercontent.com/swaggy/flow/master/commands/$command.sh
