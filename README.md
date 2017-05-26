@@ -16,4 +16,4 @@ Flow is a toolkit for all your shell parallelism needs.
 `flow await <name>`
 
 ### Group execution
-`flow group [<command> <title>, ...]`
+`flow group [<title> <command>, ...]`

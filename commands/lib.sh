@@ -92,20 +92,33 @@ clear_line() {
     echo -en '\033[K'
 }
 
+is_running() {
+    kill -s 0 $1 2>/dev/null
+    return $?
+}
+
 async() {
     (
         pid=$(bash -c 'echo $PPID')
         out=$(out_file $pid)
-        rm -f $out
+        echo > $out
         if ! (export pid; eval $@ > $out 2>&1); then
             touch $(failed_file $pid)
         fi
-    )&
+    ) > /dev/null &
 }
 
 await() {
     local pid=$1
-    cat $(out_file $pid)
+    if is_running $pid; then
+        tail -f -n +1 $(out_file $pid) &  # Output in background.
+        while is_running $pid; do
+            sleep 0.2
+        done
+        kill -SIGQUIT $(jobs -p)  # Kill output log file job
+    else
+        cat $(out_file $pid)
+    fi
     if [[ -e $(failed_file $pid) ]]; then
         exit 1
     else
@@ -166,7 +179,7 @@ group() {
             # Load the title from the file.
             local title=$(cat $(title_file $pid))
 
-            if kill -s 0 $pid 2>/dev/null; then
+            if is_running $pid; then
                 # Still running.
                 ongoing_progress_line "$title" $progress_phase
                 all_done=false
